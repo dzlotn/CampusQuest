@@ -1,2 +1,5 @@
 /*This is the main css file for the new website*/
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
