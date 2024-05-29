@@ -2,17 +2,30 @@ import Image from "next/image";
 
 export default function Index() {
   return (
-    <div className = "h-screen">
-      <div>     
-      <Image src="/map.png" alt="Logo" width={40} height={40} className="mr-2 "  />
-      </div>
+    <body className = "bg-black h">
+    <div className="h-3/4 bg-black flex">
+  <div className="w-1/2 flex flex-col justify-center items-center">
+    <h1 className="text-slate-500 text-9xl font-serif text-center">
+      Track the Journey
+    </h1>
+    <h2 className="text-slate-300 text-4xl font-serif text-center mt-4">
+      Mapping Student Success
+    </h2>
+  </div>
 
-      <h1 className = "bg-black h-screen text-white">
-        
-        Welcome to the start page
-      </h1>
-    </div>
-      );
+  <div className="w-1/2 relative overflow-hidden flex justify-center ">
+    <Image
+      src="https://wallpapercave.com/wp/wp3357174.jpg"
+      alt="sectionimage"
+      className="object-cover"
+      width={1000}
+      height={500}
+    />
+    <div className="absolute inset-0 bg-gradient-to-r from-black from-2% " />
+  </div>
+</div>
+</body>
+);
 }
 
 

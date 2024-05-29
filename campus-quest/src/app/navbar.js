@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 const Navbar = () => {
   return (
-    <nav className="flex justify-between items-center p-4 bg-lightlark border-b-[0.001rem] border-darkbrown">
+    <nav className="flex justify-between items-center p-4 bg-lightlark border-b-[0.001rem] border-slate-500">
       <div className="flex items-center">
         <Image src="/mapicon.png" alt="Logo" width={40} height={40} className="mr-2 invert"  />
         <span className="text-white text-[1.25rem] font-mono ml-2.5">CampusQuest</span>
