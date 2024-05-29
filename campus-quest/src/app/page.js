@@ -1,12 +1,14 @@
 import Image from "next/image";
 
-export default function Home() {
+export default function Index() {
   return (
     <div>
       
       <h1 className = "bg-purple-500">
-        Welcome to my App
+        Welcome to the start page
       </h1>
     </div>
       );
 }
+
+
