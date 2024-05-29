@@ -2,9 +2,9 @@ import Image from "next/image";
 
 export default function Index() {
   return (
-    <div>
+    <div className = "h-screen">
       
-      <h1 className = "bg-purple-500">
+      <h1 className = "bg-black h-screen">
         Welcome to the start page
       </h1>
     </div>
