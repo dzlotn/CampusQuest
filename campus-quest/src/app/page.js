@@ -7,7 +7,7 @@ export default function Index() {
     <body className="bg-black">
       <div className="h-3/4 bg-black flex">
         <div className="w-1/2 flex flex-col justify-center items-center">
-          <h1 className="text-slate-500 text-9xl font-serif text-center">
+          <h1 className="text-[#94D1BE] text-9xl  text-center font-bold">
             Track the Journey
           </h1>
           <h2 className="text-slate-300 text-4xl font-serif text-center mt-4">
@@ -26,7 +26,8 @@ export default function Index() {
           <div className="absolute inset-0 bg-gradient-to-r from-black from-2% " />
         </div>
       </div>
-      <div className="bg-black flex h-[50vh] border-t-4 border-dashed border-slate-500">
+      {/* border-t-4 border-dashed border-slate-500 */}
+      <div className="bg-black flex h-[50vh] "> 
         <div className="bg-black flex flex-col w-1/2 justify-center items-center border-r-4 border-radius-2">
           <h1 className="text-center">a</h1>
         </div>
