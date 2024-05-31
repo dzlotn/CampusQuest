@@ -2,6 +2,8 @@ import { Inter } from "next/font/google";
 import Navbar from './navbar';
 import Footer from './footer';
 import "./globals.css";
+import PerfectScrollbar from 'perfect-scrollbar';
+
 
 const inter = Inter({ subsets: ["latin"] });
 

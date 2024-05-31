@@ -55,7 +55,10 @@ const Navbar = () => {
         <a href = "https://github.com/dzlotn/CampusQuest" target = "_blank">
           <Image src ="/githublogo.png" width={30} height={30} className="invert-0 mr-4"></Image>
         </a>
+
+        <a href= "/signin">
         <button class="border border-white rounded-full font-bold px-8 py-2 mr-4 hover:border-green-300 " href="/statistics">Sign In</button>
+        </a>
         
       </div>
     </header>
