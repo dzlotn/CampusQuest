@@ -1,47 +1,48 @@
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+'use client'
+import { useState } from 'react';
 
-export default function Index() {
+export default function Home() {
+  const [name, setName] = useState('');
+  const [age, setAge] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('/api/insertData', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, age }),
+      });
+
+      if (response.ok) {
+        alert('Data inserted successfully');
+      } else {
+        const data = await response.json();
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error('Error inserting data:', error);
+      alert('Failed to insert data');
+    }
+  };
+
   return (
-    <body className="bg-black">
-      <div className="h-3/4 bg-black flex">
-        <div className="w-1/2 flex flex-col justify-center items-center">
-          <h1 className="text-[#94D1BE] text-9xl  text-center font-bold">
-            Track the Journey
-          </h1>
-          <h2 className="text-slate-300 text-4xl font-serif text-center mt-4">
-            Mapping Student Success
-          </h2>
-        </div>
-
-        <div className="w-1/2 relative overflow-hidden flex justify-center items-center">
-          <Image
-            src="https://wallpapercave.com/wp/wp3357174.jpg"
-            alt="sectionimage"
-            className="object-cover"
-            width={1000}
-            height={500}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black from-2% " />
-        </div>
-      </div>
-      {/* border-t-4 border-dashed border-slate-500 */}
-      <div className="bg-black flex h-[50vh] "> 
-        <div className="bg-black flex flex-col w-1/2 justify-center items-center border-r-4 border-radius-2">
-          <h1 className="text-center">a</h1>
-        </div>
-        <div className="bg-green flex w-1/2 justify-center items-center relative overflow-hidden">
-          <Image
-            src="https://wallpapers.com/images/featured/map-pin-png-uif0obj7gubmdh59.jpg"
-            alt="sectionimage"
-            className="object-cover"
-            width={400}
-            height={400}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black from-2%" />
-        </div>
-      </div>
-    </body>
+    <div>
+      <h1>Insert Data</h1>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Name:
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+        </label>
+        <label>
+          Age:
+          <input type="number" value={age} onChange={(e) => setAge(e.target.value)} />
+        </label>
+        <button type="submit">Insert Data</button>
+      </form>
+    </div>
   );
 }

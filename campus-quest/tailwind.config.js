@@ -14,7 +14,8 @@ module.exports = {
       },
       colors:{
         "lightlark" : "#111111",
-        "darkbrown": "#492B0A"
+        "darkbrown": "#492B0A",
+        "maingreen":"#94D1BE",
       },
     },
   },
