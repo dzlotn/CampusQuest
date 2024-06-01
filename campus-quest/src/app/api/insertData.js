@@ -1,33 +1,40 @@
+const fs = require('fs');
+const path = require('path');
+
+const dataFilePath = path.join(process.cwd(), 'public', 'data.json');
 
 
+// Read data from JSON file
+function readData() {
+  try {
+    const data = fs.readFileSync(dataFilePath, 'utf8');
+    return JSON.parse(data);
+    console.log("data read")
 
-export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    const { name, age } = req.body;
+  } catch (error) {
+    console.error('Error reading data file:', error);
+    return [];
 
-    // Connect to MongoDB
-    const client = new MongoClient(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-    try {
-      await client.connect();
-
-      const db = client.db('mydatabase');
-      const collection = db.collection('mycollection');
-
-      // Insert data
-      const result = await collection.insertOne({ name, age });
-
-      if (result.insertedCount === 1) {
-        res.status(201).json({ message: 'Data inserted successfully' });
-      } else {
-        res.status(500).json({ message: 'Failed to insert data' });
-      }
-    } catch (error) {
-      console.error('Error inserting data:', error);
-      res.status(500).json({ message: 'Failed to insert data' });
-    } finally {
-      await client.close();
-    }
-  } else {
-    res.status(405).json({ message: 'Method not allowed' });
   }
 }
+
+// Write data to JSON file
+function writeData(data) {
+  try {
+    fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2));
+    console.log('Data written to file successfully');
+  } catch (error) {
+    console.error('Error writing data to file:', error);
+  }
+}
+
+// Add new entry to data file
+function addEntry(newEntry) {
+  const data = readData();
+  data.push(newEntry);
+  writeData(data);
+}
+
+module.exports = {
+  addEntry
+};
