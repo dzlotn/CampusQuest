@@ -1,4 +1,5 @@
 /*This is the main css file for the new website*/
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -26,4 +27,12 @@ html, body, label {
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: #94D1BE/* Darker green */
+  }
+  @layer base {
+    .font-outline-2 {
+      -webkit-text-stroke: 2px black;
+    }
+    .font-outline-4 {
+      -webkit-text-stroke: 4px black;
+    }
   }
