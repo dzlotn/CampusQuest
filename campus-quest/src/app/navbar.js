@@ -7,7 +7,7 @@ const Navbar = () => {
 
     <header class="bg-black shadow-lg hidden md:block text-white">
       <div class="container mx-auto flex items-center h-24">
-        <Image src="/mapicon.png" alt="main icon" width={40} height={40} className="ml-4 invert" />
+        <Image src="/mapicon.png" alt="main icon" width={40} height={40} className="ml-8 invert" />
         <span class="select-none ml-4 uppercase font-black">Campus<br />Quest</span>
         <nav class="contents font-semibold text-base lg:text-lg">
           <ul class="mx-auto flex items-center">
@@ -21,8 +21,8 @@ const Navbar = () => {
             </li>
             <li class="p-5 xl:p-8">
               <div class="hover:text-[#94D1BE] hover:scale-105">
-                <a href="/statistics">
-                  <span>Statistics</span>
+                <a href="/discover">
+                  <span>Discover</span>
                 </a>
               </div>
 
@@ -30,7 +30,7 @@ const Navbar = () => {
             <li class="p-5 xl:p-8">
               <div class="hover:text-[#94D1BE] hover:scale-105">
                 <a href="">
-                  <span>Projects</span>
+                  <span>Statistics</span>
                 </a>
               </div>
             </li>
@@ -38,7 +38,7 @@ const Navbar = () => {
               <a href="">
                 <div class="hover:text-[#94D1BE] hover:scale-105">
 
-                  <span>Services</span>
+                  <span>Map</span>
                 </div>
               </a>
             </li>
@@ -46,7 +46,7 @@ const Navbar = () => {
               <a href="">
                 <div class="hover:text-[#94D1BE] hover:scale-105">
 
-                  <span>Blog</span>
+                  <span>My School</span>
                 </div>
               </a>
             </li>
