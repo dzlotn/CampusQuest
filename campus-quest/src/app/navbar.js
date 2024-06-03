@@ -12,7 +12,7 @@ const Navbar = () => {
         <nav class="contents font-semibold text-base lg:text-lg">
           <ul class="mx-auto flex items-center">
             <li class="p-5 xl:p-8 active">
-              <div class="hover:text-green-300">
+              <div class="hover:text-[#94D1BE] hover:scale-105">
 
                 <a href="/" >
                   <span>Home</span>
@@ -20,7 +20,7 @@ const Navbar = () => {
               </div>
             </li>
             <li class="p-5 xl:p-8">
-              <div className="hover:text-green-300">
+              <div class="hover:text-[#94D1BE] hover:scale-105">
                 <a href="/statistics">
                   <span>Statistics</span>
                 </a>
@@ -28,7 +28,7 @@ const Navbar = () => {
 
             </li>
             <li class="p-5 xl:p-8">
-              <div class="hover:text-green-300">
+              <div class="hover:text-[#94D1BE] hover:scale-105">
                 <a href="">
                   <span>Projects</span>
                 </a>
@@ -36,7 +36,7 @@ const Navbar = () => {
             </li>
             <li class="p-5 xl:p-8">
               <a href="">
-                <div class="hover:text-green-300">
+                <div class="hover:text-[#94D1BE] hover:scale-105">
 
                   <span>Services</span>
                 </div>
@@ -44,7 +44,7 @@ const Navbar = () => {
             </li>
             <li class="p-5 xl:p-8">
               <a href="">
-                <div class="hover:text-green-300">
+                <div class="hover:text-[#94D1BE] hover:scale-105">
 
                   <span>Blog</span>
                 </div>
@@ -52,14 +52,14 @@ const Navbar = () => {
             </li>
           </ul>
         </nav>
-        <a href = "https://github.com/dzlotn/CampusQuest" target = "_blank">
-          <Image src ="/githublogo.png" width={30} height={30} className="invert-0 mr-4"></Image>
+        <a href="https://github.com/dzlotn/CampusQuest" target="_blank">
+          <Image src="/githublogo.png" width={30} height={30} className="invert-0 mr-4"></Image>
         </a>
 
-        <a href= "/signin">
-        <button class="border border-white rounded-full font-bold px-8 py-2 mr-4 hover:border-green-300 " href="/statistics">Sign In</button>
+        <a href="/signin">
+          <button class="border border-white rounded-full font-bold px-8 py-2 mr-4 hover:border-green-300 " href="/statistics">Sign In</button>
         </a>
-        
+
       </div>
     </header>
   );

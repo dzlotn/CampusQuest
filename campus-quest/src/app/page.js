@@ -49,23 +49,43 @@ export default function Index() {
         </div>
 
       </div>
-      <div className="bg-black pt-8 pb-8">
-        <h1 className="text-4xl text-center text-white font-bold"> How CampusQuest Works</h1>
+      <div className="bg-black pt-8 pb-4">
+        <h1 className="text-3xl text-center text-white font-bold"> How CampusQuest Works</h1>
         <div className="flex justify-center space-x-8 mt-8">
-        <div className="rounded-lg border-2 border-[#255546] bg-[#94D1BE] p-4 w-64 h-16 justify-center flex items-center hover:scale-105">
+          <div className="rounded-lg border-2 border-[#255546] bg-[#94D1BE] p-4 w-64 h-16 justify-center flex items-center hover:scale-105">
             <Image src="/searchicon.png" width={20} height={20} className=" mr-4"></Image>
 
-            <h1 className="text-black text-center text-base font-bold">Step 1: Data Collection</h1>
+            <h1 className="text-black text-left text-base font-bold">Step 1: Data Collection</h1>
           </div>
           <div className="rounded-lg border-2 border-[#255546] bg-[#94D1BE] p-4 w-64 h-16 justify-center flex items-center hover:scale-105">
-            <Image src="/map.png" width={30} height={30} className=" mr-4"></Image>
+            <Image src="/mapicon.png" width={30} height={30} className=" mr-4 mb-1"></Image>
 
-            <h1 className="text-black text-center text-base font-bold">Step 2: Mapping</h1>
+            <h1 className="text-black text-left text-base font-bold">Step 2: Mapping</h1>
           </div>
           <div className="rounded-lg border-2 border-[#255546] bg-[#94D1BE] p-4 w-64 h-16 justify-center flex items-center hover:scale-105">
             <Image src="/data.png" width={30} height={30} className=" mr-4"></Image>
 
-            <h1 className="text-black text-center text-base font-bold">Step 3: Visualization</h1>
+            <h1 className="text-black text-left text-base font-bold">Step 3: Visualization</h1>
+          </div>
+        </div>
+      </div>
+      <div className="bg-black pt-8 pb-8">
+        <h1 className="text-3xl text-center text-white font-bold"> Benefits of CampusQuest</h1>
+        <div className="flex justify-center space-x-8 mt-8">
+          <div className="rounded-lg border-2 border-[#255546] bg-[#94D1BE] p-4 w-64 h-16 justify-center flex items-center hover:scale-105">
+            <Image src="/lightbulb.png" width={35} height={35} className=" mr-2 mb-1"></Image>
+
+            <h1 className="text-black text-left text-base font-bold">Insights</h1>
+          </div>
+          <div className="rounded-lg border-2 border-[#255546] bg-[#94D1BE] p-4 w-64 h-16 justify-center flex items-center hover:scale-105">
+            <Image src="/handshake.png" width={40} height={40} className=" mr-4"></Image>
+
+            <h1 className="text-black text-left text-base font-bold">Engagement</h1>
+          </div>
+          <div className="rounded-lg border-2 border-[#255546] bg-[#94D1BE] p-4 w-64 h-16 justify-center flex items-center hover:scale-105">
+            <Image src="/tick.png" width={30} height={30} className=" mr-4"></Image>
+
+            <h1 className="text-black text-left text-base font-bold">Decision Making</h1>
           </div>
         </div>
       </div>
