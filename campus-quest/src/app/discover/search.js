@@ -1,6 +1,3 @@
-const SerpApi = require('serpapi');
-const apiKey = "N4shxJsBsGLLvTM9VQvKxXdn"; // Replace with your SerpApi API key
-
 let txt = "";
 
 function search() {
@@ -22,33 +19,6 @@ const dict = {
     "Stanford University": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Stanford_Cardinal_logo.svg/670px-Stanford_Cardinal_logo.svg.png"
 };
 
-async function getIcon(college) {
-    try {
-        console.log("Fetching image for " + college + "...");
-        const search = new SerpApi.GoogleSearch(apiKey);
-
-        const params = {
-            engine: "google",
-            q: college + " logo",
-            tbm: "isch"
-        };
-
-        return new Promise((resolve, reject) => {
-            search.json(params, (data) => {
-                if (data && data.images_results && data.images_results.length > 0) {
-                    resolve(data.images_results[0].thumbnail);
-                } else {
-                    reject("No image found");
-                }
-            });
-        });
-    } catch (error) {
-        console.log("Error fetching image for " + college + ": " + error);
-        throw new Error("Failed to fetch image for " + college);
-    }
-}
-
-
 // Checks if icon pic is in dictionary. If it is, it returns the image link
 async function checkIcon(college) {
     try {
@@ -60,9 +30,9 @@ async function checkIcon(college) {
             console.log("Image not found");
             try {
                 const icon = await getIcon(college);
-                dict[college] = icon;
-                dict[college.split(' ')[0]] = icon;
-                return icon;
+                dict[college] = icon.url;
+                dict[college.split(' ')[0]] = icon.url;
+                return icon.url;
             } catch (error) {
                 console.log("Error getting image for " + college + ": " + error);
                 throw new Error("Failed to fetch image for " + college);
@@ -74,5 +44,35 @@ async function checkIcon(college) {
     }
 }
 
+// Function to call the API route and get the icon URL
+async function getIcon(college) {
+    const response = await fetch('./get-icon', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ college: college })
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch icon: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    if (data.error) {
+        throw new Error(`API error: ${data.error}`);
+    }
+
+    return data;
+}
+
+// Example usage
+checkIcon('Cornell University')
+    .then(result => {
+        console.log('Icon URL:', result);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 
 module.exports = { search, logChanges, checkIcon };
