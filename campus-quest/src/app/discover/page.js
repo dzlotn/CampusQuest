@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
 import Image from 'next/image';
-import { search, logChanges, getCollegeInfo,checkIcon} from './search'; // Assuming 'search.js' is in the same directory
+import { search, logChanges,checkIcon} from './search'; // Assuming 'search.js' is in the same directory
 
 
 export default function Discover() {

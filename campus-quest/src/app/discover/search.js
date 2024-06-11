@@ -45,34 +45,6 @@ async function checkIcon(college) {
 }
 
 // Function to call the API route and get the icon URL
-async function getIcon(college) {
-    const response = await fetch('./get-icon', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ college: college })
-    });
-
-    if (!response.ok) {
-        throw new Error(`Failed to fetch icon: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    if (data.error) {
-        throw new Error(`API error: ${data.error}`);
-    }
-
-    return data;
-}
-
-// Example usage
-checkIcon('Cornell University')
-    .then(result => {
-        console.log('Icon URL:', result);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-
+   
+    
 module.exports = { search, logChanges, checkIcon };
