@@ -30,7 +30,8 @@
     "python-shell": "^5.0.0",
     "react": "^18",
     "react-dom": "^18",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "postcss": "^8",
