@@ -1,9 +1,14 @@
+import { useState } from 'react';
+
+// Initial text state
 let txt = "";
 
+// Function to return the current search text
 function search() {
     return txt;
 }
 
+// Function to update the text based on an element's value
 function logChanges(id) {
     try {
         txt = document.getElementById(id).value;
@@ -13,38 +18,54 @@ function logChanges(id) {
     }
 }
 
+// Dictionary of college icons
 const dict = {
     "Cornell University": "https://upload.wikimedia.org/wikipedia/commons/4/42/Cornell_University_Logo.png",
     "Cornell": "https://upload.wikimedia.org/wikipedia/commons/4/42/Cornell_University_Logo.png",
     "Stanford University": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Stanford_Cardinal_logo.svg/670px-Stanford_Cardinal_logo.svg.png"
 };
 
-// Checks if icon pic is in dictionary. If it is, it returns the image link
+// Function to check if the college icon is in the dictionary, otherwise fetch it
 async function checkIcon(college) {
     try {
         console.log("Searching for " + college + "...");
-        if (college in dict) {
+        if (dict[college]) {
             console.log("Found \"" + college + "\" in dictionary");
             return dict[college];
         } else {
-            console.log("Image not found");
+            console.log("Image not found, fetching...");
             try {
-                const icon = await getIcon(college);
-                dict[college] = icon.url;
-                dict[college.split(' ')[0]] = icon.url;
-                return icon.url;
+                const icon = await executePython(college);
+                dict[college] = icon;
+                dict[college.split(' ')[0]] = icon;
+                return icon;
             } catch (error) {
-                console.log("Error getting image for " + college + ": " + error);
+                console.error("Error getting image for " + college + ": " + error);
                 throw new Error("Failed to fetch image for " + college);
             }
         }
     } catch (error) {
-        console.log("Error fetching image for " + college + ": " + error);
+        console.error("Error fetching image for " + college + ": " + error);
         throw new Error("Failed to get college icon for " + college);
     }
 }
 
 // Function to call the API route and get the icon URL
-   
-    
-module.exports = { search, logChanges, checkIcon };
+function executePython(college) {
+    return fetch(`/api?college=${college}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error('Error:', data.error);
+                throw new Error(data.error);
+            } else {
+                return data.result;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error.message);
+            throw error;
+        });
+}
+
+export { search, logChanges, checkIcon, executePython };

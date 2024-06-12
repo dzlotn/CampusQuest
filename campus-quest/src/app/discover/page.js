@@ -3,7 +3,6 @@ import React from 'react';
 import Image from 'next/image';
 import { search, logChanges,checkIcon} from './search'; // Assuming 'search.js' is in the same directory
 
-
 export default function Discover() {
     return (    
         <body className="bg-black">

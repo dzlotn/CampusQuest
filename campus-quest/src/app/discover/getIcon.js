@@ -1,30 +1,40 @@
-const express = require('express');
-const { spawn } = require('child_process');
-const app = express();
-const port = 3000;
 
-app.get('/', (req, res) => {
+// Function to execute the Python script and return a promise
+function runPythonScript(college) {
+    const { spawn } = require('child_process');
+
+    return new Promise((resolve, reject) => {
+        const python = spawn('python', ['api.py', college]);
+
+        let dataToSend = '';
+
+        python.stdout.on('data', (data) => {
+            dataToSend += data.toString();
+        });
+
+        python.stderr.on('data', (data) => {
+            console.error(`stderr: ${data}`);
+        });
+
+        python.on('close', (code) => {
+            if (code !== 0) {
+                reject(new Error(`Python script exited with code ${code}`));
+            } else {
+                resolve(dataToSend);
+            }
+        });
+    });
+}
+
+// Execute the function
+function executePython(){
     const college = "Stanford";
-    let dataToSend;
-
-    // spawn new child process to call the python script 
-    // and pass the variable values to the python script
-    const python = spawn('python', ['api.py', college]);
-
-    // collect data from script
-    python.stdout.on('data', function (data) {
-        console.log('Pipe data from python script ...');
-        dataToSend = data.toString();
-        console.log(dataToSend);
-        // res.send(dataToSend); // send data to browser
+runPythonScript(college)
+    .then(result => {
+        console.log('Result:', result);
+    })
+    .catch(error => {
+        console.error('Error:', error.message);
     });
+}
 
-    // in close event we are sure that stream from child process is closed
-    python.on('close', (code) => {
-        console.log(`child process close all stdio with code ${code}`);
-    });
-});
-
-app.listen(port, () => {
-    console.log(`app is listening on port ${port}!`);
-});
