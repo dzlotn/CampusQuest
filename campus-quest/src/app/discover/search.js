@@ -50,22 +50,5 @@ async function checkIcon(college) {
     }
 }
 
-// Function to call the API route and get the icon URL
-function executePython(college) {
-    return fetch(`/api?college=${college}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                console.error('Error:', data.error);
-                throw new Error(data.error);
-            } else {
-                return data.result;
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error.message);
-            throw error;
-        });
-}
 
 export { search, logChanges, checkIcon, executePython };
