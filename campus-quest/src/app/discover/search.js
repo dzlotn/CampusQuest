@@ -1,6 +1,4 @@
 import { useState } from 'react';
-const request = require('request');
-const cheerio = require('cheerio');
 
 // Initial text state
 let txt = "";
@@ -21,11 +19,29 @@ function logChanges(id) {
 }
 
 // Dictionary of college icons
-const dict = {
-    "Cornell University": "https://upload.wikimedia.org/wikipedia/commons/4/42/Cornell_University_Logo.png",
-    "Cornell": "https://upload.wikimedia.org/wikipedia/commons/4/42/Cornell_University_Logo.png",
-    "Stanford University": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Stanford_Cardinal_logo.svg/670px-Stanford_Cardinal_logo.svg.png"
-};
+let dict = {};
+
+// Function to read data from localStorage and populate the dict object
+function readLocalStorage() {
+    const data = localStorage.getItem('college_icons');
+    if (data) {
+        const entries = JSON.parse(data);
+        for (const [college, url] of entries) {
+            dict[college] = url;
+        }
+        console.log("Dictionary populated from localStorage:", dict);
+    }
+}
+
+// Function to write data to localStorage
+function writeToLocalStorage(college, url) {
+    const data = localStorage.getItem('college_icons');
+    const entries = data ? JSON.parse(data) : [];
+    entries.push([college, url]);
+    localStorage.setItem('college_icons', JSON.stringify(entries));
+    console.log("Data appended to localStorage:", college, url);
+    readLocalStorage()
+}
 
 // Function to check if the college icon is in the dictionary, otherwise fetch it
 async function checkIcon(college) {
@@ -37,9 +53,13 @@ async function checkIcon(college) {
         } else {
             console.log("Image not found, fetching...");
             try {
-                const icon = await executePython(college);
+                const icon = await getIcon(college);
                 dict[college] = icon;
                 dict[college.split(' ')[0]] = icon;
+                console.log("Image fetched:", icon);
+                writeToLocalStorage(college, icon);
+                console.log("Hello")
+                console.log(dict)
                 return icon;
             } catch (error) {
                 console.error("Error getting image for " + college + ": " + error);
@@ -52,34 +72,27 @@ async function checkIcon(college) {
     }
 }
 
-function getIcon(college) {
-    const college = "Stanford";
+// Function to fetch college logo from Yahoo
+async function getIcon(college) {
     const query = college + " logo wikimedia transparent background";
     const url = `https://images.search.yahoo.com/search/images?p=${encodeURIComponent(query)}`;
 
-    request(url, (error, response, html) => {
-        if (!error && response.statusCode === 200) {
-            const $ = cheerio.load(html);
-            const images = [];
-
-            $('img').each((index, element) => {
-                const imageUrl = $(element).attr('src');
-                if (imageUrl) {
-                    images.push(imageUrl);
-                }
-            });
-
-            if (images.length > 0) {
-                console.log(images[0]);
-            } else {
-                console.error('No images found for the query:', query);
-            }
-        } else {
-            console.error('Failed to fetch images:', error);
-        }
-    });
+    try {
+        const response = await fetch(url);
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const images = Array.from(doc.querySelectorAll('img')).map(img => img.src);
+        return images[1]; // Returning the first image URL
+    } catch (error) {
+        console.error('Failed to fetch images:', error);
+        throw new Error('Failed to fetch images for ' + college);
+    }
 }
 
+// Read data from localStorage on application start
+
+// Example usage
 
 
-export { search, logChanges, checkIcon, executePython };
+export { search, logChanges, checkIcon };
