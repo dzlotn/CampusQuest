@@ -45,9 +45,11 @@ export default function Discover() {
             {collegeInfo && (
                 <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-3/10 bg-white rounded-lg p-4">
+                    <div>
                         <h2 className="text-black text-2xl font-bold">{collegeInfo.name}</h2>
                         <img src={collegeInfo.icon} alt="College Icon" />
-                        {/* Add more college information here */}
+                        </div>
+                        <h2 className="text-black text-2xl font-bold">Location: </h2>
                         <button onClick={handleBack}>Back</button>
                     </div>
                 </div>
