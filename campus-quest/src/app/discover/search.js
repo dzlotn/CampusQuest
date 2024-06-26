@@ -85,8 +85,8 @@ async function getIcon(college) {
         const images = Array.from(doc.querySelectorAll('img')).map(img => img.src);
         return images[1]; // Returning the first image URL
     } catch (error) {
-        console.error('Failed to fetch images:', error);
-        throw new Error('Failed to fetch images for ' + college);
+        console.error('Failed to fetch images. Error:', error);
+        throw new Error('Failed to fetch all images ' + college);
     }
 }
 
