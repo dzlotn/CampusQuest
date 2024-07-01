@@ -11,6 +11,7 @@ export default function Discover() {
             const college = search(); // Perform the search
             const icon = await checkIcon(college); // Fetch the college icon
             // Set the college information
+
             setCollegeInfo({
                 name: college,
                 icon: icon
@@ -19,8 +20,9 @@ export default function Discover() {
             console.error('Error searching for college:', error);
             // Handle error
         }
+
     };
-    const handleBack=()=>{
+    const handleBack = () => {
         setCollegeInfo(null)
     }
 
@@ -43,17 +45,34 @@ export default function Discover() {
                 </div>
             </div>
             {collegeInfo && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-3/10 bg-white rounded-lg p-4">
-                    <div>
-                        <h2 className="text-black text-2xl font-bold">{collegeInfo.name}</h2>
-                        <img src={collegeInfo.icon} alt="College Icon" />
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                    <div className="w-full max-w-sm bg-white rounded-lg p-6 shadow-lg">
+                        <div className="flex items-center">
+                            <img src={collegeInfo.icon} alt="College Icon" className="h-16 w-16 rounded-full" />
+                            <h2 className="text-gray-900 text-2xl font-bold ml-4">
+                                {collegeInfo.name.includes("University") ? collegeInfo.name : `${collegeInfo.name} University`}
+                            </h2>
                         </div>
-                        <h2 className="text-black text-2xl font-bold">Location: </h2>
-                        <button onClick={handleBack}>Back</button>
+                        <div className="mt-6">
+                            <h3 className="text-gray-700 text-lg font-medium">Admissions Rate: 13{collegeInfo.admissionsRate}%</h3>
+                            <h3 className="text-gray-700 text-lg font-medium mt-2">Tuition Cost: 70,000${collegeInfo.tuitionCost}</h3>
+                        </div>
+                        <div className="mt-6 flex space-x-4">
+                            <button onClick={handleBack} className="w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded-lg hover:bg-blue-700">
+                                Back
+                            </button>
+                            <a href={`https://www.google.com/search?q=${collegeInfo.name}`} target="_blank" rel="noopener noreferrer" className="w-full bg-green-600 text-white text-lg font-semibold py-2 rounded-lg text-center hover:bg-green-700">
+                                More Info
+                            </a>
+                        </div>
                     </div>
                 </div>
             )}
+
+
+
+
+
         </body>
     );
 }
