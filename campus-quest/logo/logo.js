@@ -1,35 +1,47 @@
-const express = require('express')
-const { spawn } = require('child_process');
-const app = express()
-const port = 3000
+// Import node-fetch using dynamic import
+const fetch = import('node-fetch');
 
-app.get('/', (req, res) => {
+// Function to fetch admissions data from the College Scorecard API
+async function fetchAdmissionsData(college) {
+    const apiKey = "5elOYbbfPfFRR0JwuFqKOmwz2PxqVlNZKuvTpukC";
+    const apiUrl = `https://api.data.gov/ed/collegescorecard/v1/schools.json?api_key=${apiKey}&school.name=${encodeURIComponent(college)}`;
 
-    const firstNum = 4;
-    const secondNum = 7;
+    try {
+        const response = await (await fetch).default(apiUrl);
+        if (!response.ok) {
+            throw new Error('Failed to fetch college data');
+        }
+        const json = await response.json();
 
-    let dataToSend;
-    // spawn new child process to call the python script 
-    // and pass the variable values to the python script
-    const python = spawn('python', ['index.py', firstNum , secondNum]);
+        // Check if the JSON structure is as expected
+        if (!json.results || json.results.length === 0 || !json.results[0].latest) {
+            throw new Error('No data found for college: ' + college);
+        }
 
-    // collect data from script
-    python.stdout.on('data', function (data) {
-        console.log('Pipe data from python script ...');
+        // Access admissions rate and tuition cost
+        const admissionsData = {
+            admissionRate: json.results[0].latest.admissions.admission_rate.overall.toFixed(2),
+            tuitionCost: json.results[0].latest.cost.tuition.in_state
+        };
 
-        dataToSend = data.toString();
-        console.log(dataToSend)
+        return admissionsData;
+    } catch (error) {
+        console.error('Error fetching admissions data:', error);
+        throw new Error('Failed to fetch admissions data for ' + college);
+    }
+}
 
-    });
-    console.log("hello")
-    // in close event we are sure that stream from child process is closed
-    python.on('close', (code) => {
-        console.log(`child process close all stdio with code ${code}`);
-        // send data to browser
-    });
+// Function to test fetching college admissions data
+async function testCollegeInfo(college) {
+    try {
+        const admissionsData = await fetchAdmissionsData(college);
+        console.log("College:", college);
+        console.log("Admissions Data:", admissionsData);
+    } catch (error) {
+        console.error("Error fetching college info:", error);
+    }
+}
 
-})
-
-app.listen(port, () => {
-    console.log(`app is listening on port ${port}!`)
-})
+// Example usage
+const collegeName = "Cornell University";
+testCollegeInfo(collegeName);
