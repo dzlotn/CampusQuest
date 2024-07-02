@@ -2,33 +2,47 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { search, logChanges, checkIcon } from './search'; // Assuming 'search.js' is in the same directory
+import { testCollegeInfo } from "./admissions"; // Assuming 'admissions.js' is in the same directory
 
 const commonColleges = [
-    { name: "Harvard University", icon: "/harvard.jpg", admissionsRate: "5", tuitionCost: "54000" },
-    { name: "Stanford University", icon: "/stanford.jpg", admissionsRate: "4", tuitionCost: "53000" },
-    { name: "MIT", icon: "/mit.jpg", admissionsRate: "6", tuitionCost: "50000" },
-    { name: "Yale University", icon: "/yale.jpg", admissionsRate: "7", tuitionCost: "58000" },
-    { name: "Princeton University", icon: "/princeton.jpg", admissionsRate: "6", tuitionCost: "53000" },
-    { name: "Columbia University", icon: "/columbia.jpeg", admissionsRate: "5", tuitionCost: "54000" },
+    { name: "Harvard University", icon: "/harvard.jpg" },
+    { name: "Stanford University", icon: "/stanford.jpg" },
+    { name: "MIT", icon: "/mit.jpg" },
+    { name: "Yale University", icon: "/yale.jpg" },
+    { name: "Princeton University", icon: "/princeton.jpg" },
+    { name: "Columbia University", icon: "/columbia.jpeg" },
 ];
 
 export default function Discover() {
     const [collegeInfo, setCollegeInfo] = useState(null);
+    const [error, setError] = useState(false);
 
     const handleSearch = async () => {
         try {
             const college = search(); // Perform the search
             const icon = await checkIcon(college); // Fetch the college icon
+            const admissions = await testCollegeInfo(college);
+
             // Set the college information
             setCollegeInfo({
                 name: college,
                 icon: icon,
-                admissionsRate: "13", // Placeholder admissions rate
-                tuitionCost: "70000" // Placeholder tuition cost
+                acceptanceRate: admissions.acceptanceRate*100,
+                tuitionCost: admissions.tuitionCost
             });
+            setError(false); // Reset error state
         } catch (error) {
             console.error('Error searching for college:', error);
-            // Handle error
+            const college = search(); // Perform the search
+            const icon = await checkIcon(college); // Fetch the college icon
+            setCollegeInfo({
+                name: college,
+                icon: icon,
+                acceptanceRate: "NAN",
+                tuitionCost: "NAN"
+            }); 
+            setError(true); // Set error state
+            
         }
     };
 
@@ -38,6 +52,7 @@ export default function Discover() {
 
     const handleBack = () => {
         setCollegeInfo(null);
+        setError(false); // Reset error state when going back
     };
 
     return (
@@ -70,8 +85,14 @@ export default function Discover() {
                             {collegeInfo && collegeInfo.name === college.name && (
                                 <div className="absolute inset-0 bg-white bg-opacity-90 flex flex-col items-center justify-center p-4">
                                     <h3 className="text-gray-900 text-lg font-bold">{college.name.includes("University") ? college.name : `${college.name} University`}</h3>
-                                    <p className="text-gray-700 mt-2">Admissions Rate: {college.admissionsRate}%</p>
-                                    <p className="text-gray-700 mt-2">Tuition Cost: ${college.tuitionCost}</p>
+                                    {error ? (
+                                        <p className="text-red-500 mt-2">Admissions data not available</p>
+                                    ) : (
+                                        <>
+                                            <p className="text-gray-700 mt-2">Admissions Rate: {collegeInfo.acceptanceRate}%</p>
+                                            <p className="text-gray-700 mt-2">Tuition Cost: ${collegeInfo.tuitionCost}</p>
+                                        </>
+                                    )}
                                 </div>
                             )}
                         </div>
@@ -87,8 +108,14 @@ export default function Discover() {
                             {collegeInfo && collegeInfo.name === college.name && (
                                 <div className="absolute inset-0 bg-white bg-opacity-90 flex flex-col items-center justify-center p-4">
                                     <h3 className="text-gray-900 text-lg font-bold">{college.name.includes("University") ? college.name : `${college.name} University`}</h3>
-                                    <p className="text-gray-700 mt-2">Admissions Rate: {college.admissionsRate}%</p>
-                                    <p className="text-gray-700 mt-2">Tuition Cost: ${college.tuitionCost}</p>
+                                    {error ? (
+                                        <p className="text-red-500 mt-2">Admissions data not available</p>
+                                    ) : (
+                                        <>
+                                            <p className="text-gray-700 mt-2">Admissions Rate: {collegeInfo.acceptanceRate}%</p>
+                                            <p className="text-gray-700 mt-2">Tuition Cost: ${collegeInfo.tuitionCost}</p>
+                                        </>
+                                    )}
                                 </div>
                             )}
                         </div>
@@ -105,7 +132,7 @@ export default function Discover() {
                             </h2>
                         </div>
                         <div className="mt-6">
-                            <h3 className="text-gray-700 text-lg font-medium">Admissions Rate: {collegeInfo.admissionsRate}%</h3>
+                            <h3 className="text-gray-700 text-lg font-medium">Admissions Rate: {collegeInfo.acceptanceRate}%</h3>
                             <h3 className="text-gray-700 text-lg font-medium mt-2">Tuition Cost: ${collegeInfo.tuitionCost}</h3>
                         </div>
                         <div className="mt-6 flex space-x-4">
