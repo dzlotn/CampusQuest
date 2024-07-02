@@ -21,8 +21,14 @@ export async function fetchAdmissionsData(college) {
         // Access admissions rate and tuition cost
         const acceptanceRate = json.results[0].latest.admissions.admission_rate.overall.toFixed(2);
         const tuitionCost = json.results[0].latest.cost.tuition.in_state;
+        
+        // Access city and state information
+        const city = json.results[0].school.city;
+        const state = json.results[0].school.state
+        
+        
 
-        return { acceptanceRate, tuitionCost };
+        return { acceptanceRate, tuitionCost, city, state};
     } catch (error) {
         console.error('Error fetching admissions data:', error);
         throw new Error('Failed to fetch admissions data for ' + college);
@@ -32,8 +38,8 @@ export async function fetchAdmissionsData(college) {
 // Function to test fetching college admissions data
 export async function testCollegeInfo(college) {
     try {
-        const { acceptanceRate, tuitionCost } = await fetchAdmissionsData(college);
-        return { acceptanceRate, tuitionCost };
+        const { acceptanceRate, tuitionCost, city, state } = await fetchAdmissionsData(college);
+        return { acceptanceRate, tuitionCost, city, state };
     } catch (error) {
         console.error("Error fetching college info:", error);
         throw error; // Re-throw the error for handling elsewhere if needed

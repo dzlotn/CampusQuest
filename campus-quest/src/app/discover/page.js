@@ -28,7 +28,8 @@ export default function Discover() {
                 name: college,
                 icon: icon,
                 acceptanceRate: admissions.acceptanceRate*100,
-                tuitionCost: admissions.tuitionCost
+                tuitionCost: admissions.tuitionCost,
+                state: admissions.state
             });
             setError(false); // Reset error state
         } catch (error) {
@@ -39,7 +40,9 @@ export default function Discover() {
                 name: college,
                 icon: icon,
                 acceptanceRate: "NAN",
-                tuitionCost: "NAN"
+                tuitionCost: "NAN",
+                state: "NAN"
+
             }); 
             setError(true); // Set error state
             
@@ -91,6 +94,7 @@ export default function Discover() {
                                         <>
                                             <p className="text-gray-700 mt-2">Admissions Rate: {collegeInfo.acceptanceRate}%</p>
                                             <p className="text-gray-700 mt-2">Tuition Cost: ${collegeInfo.tuitionCost}</p>
+                                            <p className="text-gray-700 mt-2">State: {collegeInfo.state}</p>
                                         </>
                                     )}
                                 </div>
@@ -114,6 +118,8 @@ export default function Discover() {
                                         <>
                                             <p className="text-gray-700 mt-2">Admissions Rate: {collegeInfo.acceptanceRate}%</p>
                                             <p className="text-gray-700 mt-2">Tuition Cost: ${collegeInfo.tuitionCost}</p>
+                                            <p className="text-gray-700 mt-2">State: {collegeInfo.state}</p>
+
                                         </>
                                     )}
                                 </div>
@@ -134,6 +140,8 @@ export default function Discover() {
                         <div className="mt-6">
                             <h3 className="text-gray-700 text-lg font-medium">Admissions Rate: {collegeInfo.acceptanceRate}%</h3>
                             <h3 className="text-gray-700 text-lg font-medium mt-2">Tuition Cost: ${collegeInfo.tuitionCost}</h3>
+                            <h3 className="text-gray-700 mt-2">State: {collegeInfo.state}</h3>
+
                         </div>
                         <div className="mt-6 flex space-x-4">
                             <button onClick={handleBack} className="w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded-lg hover:bg-blue-700">
