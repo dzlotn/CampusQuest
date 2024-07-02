@@ -1,13 +1,15 @@
-'use client'
+'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { search, logChanges, checkIcon } from './search'; // Assuming 'search.js' is in the same directory
 
 const commonColleges = [
-    { name: "Harvard University", icon: "/harvard.png", admissionsRate: "5", tuitionCost: "54000" },
-    { name: "Stanford University", icon: "/stanford.png", admissionsRate: "4", tuitionCost: "53000" },
-    { name: "MIT", icon: "/mit.png", admissionsRate: "6", tuitionCost: "50000" },
-    { name: "Yale University", icon: "/yale.png", admissionsRate: "7", tuitionCost: "58000" },
+    { name: "Harvard University", icon: "/harvard.jpg", admissionsRate: "5", tuitionCost: "54000" },
+    { name: "Stanford University", icon: "/stanford.jpg", admissionsRate: "4", tuitionCost: "53000" },
+    { name: "MIT", icon: "/mit.jpg", admissionsRate: "6", tuitionCost: "50000" },
+    { name: "Yale University", icon: "/yale.jpg", admissionsRate: "7", tuitionCost: "58000" },
+    { name: "Princeton University", icon: "/princeton.jpg", admissionsRate: "6", tuitionCost: "53000" },
+    { name: "Columbia University", icon: "/columbia.jpeg", admissionsRate: "5", tuitionCost: "54000" },
 ];
 
 export default function Discover() {
@@ -30,12 +32,12 @@ export default function Discover() {
         }
     };
 
-    const handleBack = () => {
-        setCollegeInfo(null);
-    };
-
     const handleCardClick = (college) => {
         setCollegeInfo(college);
+    };
+
+    const handleBack = () => {
+        setCollegeInfo(null);
     };
 
     return (
@@ -58,17 +60,37 @@ export default function Discover() {
             </div>
             <div className="p-6">
                 <h2 className="text-white text-xl font-bold mb-4 text-center">Common Colleges</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {commonColleges.map((college) => (
-                        <div key={college.name} className="bg-white rounded-lg p-4 shadow-lg cursor-pointer hover:shadow-xl" onClick={() => handleCardClick(college)}>
-                            <div className="flex items-center">
-                                <img src={college.icon} alt={`${college.name} Icon`} className="h-16 w-16 rounded-full" />
-                                <h3 className="text-gray-900 text-lg font-bold ml-4">{college.name.includes("University") ? college.name : `${college.name} University`}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+                    {commonColleges.slice(0, 3).map((college) => (
+                        <div key={college.name} className="relative bg-white rounded-lg overflow-hidden shadow-lg cursor-pointer hover:shadow-xl" onClick={() => handleCardClick(college)}>
+                            <img src={college.icon} alt={`${college.name} Icon`} className="w-full h-40 object-cover" />
+                            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                                <h3 className="text-white text-lg font-bold">{college.name}</h3>
                             </div>
-                            <div className="mt-2">
-                                <p className="text-gray-700">Admissions Rate: {college.admissionsRate}%</p>
-                                <p className="text-gray-700">Tuition Cost: ${college.tuitionCost}</p>
+                            {collegeInfo && collegeInfo.name === college.name && (
+                                <div className="absolute inset-0 bg-white bg-opacity-90 flex flex-col items-center justify-center p-4">
+                                    <h3 className="text-gray-900 text-lg font-bold">{college.name.includes("University") ? college.name : `${college.name} University`}</h3>
+                                    <p className="text-gray-700 mt-2">Admissions Rate: {college.admissionsRate}%</p>
+                                    <p className="text-gray-700 mt-2">Tuition Cost: ${college.tuitionCost}</p>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {commonColleges.slice(3).map((college) => (
+                        <div key={college.name} className="relative bg-white rounded-lg overflow-hidden shadow-lg cursor-pointer hover:shadow-xl" onClick={() => handleCardClick(college)}>
+                            <img src={college.icon} alt={`${college.name} Icon`} className="w-full h-40 object-cover" />
+                            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                                <h3 className="text-white text-lg font-bold">{college.name}</h3>
                             </div>
+                            {collegeInfo && collegeInfo.name === college.name && (
+                                <div className="absolute inset-0 bg-white bg-opacity-90 flex flex-col items-center justify-center p-4">
+                                    <h3 className="text-gray-900 text-lg font-bold">{college.name.includes("University") ? college.name : `${college.name} University`}</h3>
+                                    <p className="text-gray-700 mt-2">Admissions Rate: {college.admissionsRate}%</p>
+                                    <p className="text-gray-700 mt-2">Tuition Cost: ${college.tuitionCost}</p>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
