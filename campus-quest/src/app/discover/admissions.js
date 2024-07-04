@@ -1,6 +1,71 @@
 // Import isomorphic-fetch
 import fetch from 'isomorphic-fetch';
 
+function abbrState(input, to){
+    
+    var states = [
+        ['Arizona', 'AZ'],
+        ['Alabama', 'AL'],
+        ['Alaska', 'AK'],
+        ['Arkansas', 'AR'],
+        ['California', 'CA'],
+        ['Colorado', 'CO'],
+        ['Connecticut', 'CT'],
+        ['Delaware', 'DE'],
+        ['Florida', 'FL'],
+        ['Georgia', 'GA'],
+        ['Hawaii', 'HI'],
+        ['Idaho', 'ID'],
+        ['Illinois', 'IL'],
+        ['Indiana', 'IN'],
+        ['Iowa', 'IA'],
+        ['Kansas', 'KS'],
+        ['Kentucky', 'KY'],
+        ['Louisiana', 'LA'],
+        ['Maine', 'ME'],
+        ['Maryland', 'MD'],
+        ['Massachusetts', 'MA'],
+        ['Michigan', 'MI'],
+        ['Minnesota', 'MN'],
+        ['Mississippi', 'MS'],
+        ['Missouri', 'MO'],
+        ['Montana', 'MT'],
+        ['Nebraska', 'NE'],
+        ['Nevada', 'NV'],
+        ['New Hampshire', 'NH'],
+        ['New Jersey', 'NJ'],
+        ['New Mexico', 'NM'],
+        ['New York', 'NY'],
+        ['North Carolina', 'NC'],
+        ['North Dakota', 'ND'],
+        ['Ohio', 'OH'],
+        ['Oklahoma', 'OK'],
+        ['Oregon', 'OR'],
+        ['Pennsylvania', 'PA'],
+        ['Rhode Island', 'RI'],
+        ['South Carolina', 'SC'],
+        ['South Dakota', 'SD'],
+        ['Tennessee', 'TN'],
+        ['Texas', 'TX'],
+        ['Utah', 'UT'],
+        ['Vermont', 'VT'],
+        ['Virginia', 'VA'],
+        ['Washington', 'WA'],
+        ['West Virginia', 'WV'],
+        ['Wisconsin', 'WI'],
+        ['Wyoming', 'WY'],
+    ];
+
+    
+     if (to == 'name'){
+        input = input.toUpperCase();
+        for(i = 0; i < states.length; i++){
+            if(states[i][1] == input){
+                return(states[i][0]);
+            }
+        }    
+    }
+}
 // Function to fetch admissions data from the College Scorecard API
 export async function fetchAdmissionsData(college) {
     const apiKey = "5elOYbbfPfFRR0JwuFqKOmwz2PxqVlNZKuvTpukC";
@@ -20,11 +85,15 @@ export async function fetchAdmissionsData(college) {
 
         // Access admissions rate and tuition cost
         const acceptanceRate = json.results[0].latest.admissions.admission_rate.overall.toFixed(2);
-        const tuitionCost = json.results[0].latest.cost.tuition.in_state;
+        const tC = json.results[0].latest.cost.tuition.in_state;
+        const tuitionCost = tC.toLocaleString();
+        console.log(tuitionCost)
+        console.log(tC)
         
         // Access city and state information
         const city = json.results[0].school.city;
-        const state = json.results[0].school.state
+        const st = json.results[0].school.state;
+        const state = abbrState(st, "name")
         
         
 
