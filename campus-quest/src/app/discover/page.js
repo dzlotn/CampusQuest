@@ -20,7 +20,15 @@ const hardcodedColleges = {
     icon: '/cornell.jpg', // Replace with actual icon path
     acceptanceRate: 0.105, // Example acceptance rate (10.5%)
     tuitionCost: 60000, // Example tuition cost
-    state: 'New York',
+    state: 'NY',
+    city: 'Ithaca',
+  },
+  "Cornell University": {
+    name: 'Cornell University',
+    icon: '/cornell.jpg', // Replace with actual icon path
+    acceptanceRate: 0.105, // Example acceptance rate (10.5%)
+    tuitionCost: 60000, // Example tuition cost
+    state: 'NY',
     city: 'Ithaca',
   },
   MIT: {
@@ -120,7 +128,7 @@ export default function Discover() {
   return (
     <div className="bg-black min-h-screen">
       <div className="relative bg-black">
-        <div className="image-container relative flex items-center justify-center">
+        <div className="image-container relative flex items-center justify-center pt-4 ">
           <Image
             src="/college.jpg"
             alt="sectionimage"
@@ -151,7 +159,7 @@ export default function Discover() {
         </div>
       </div>
       <div className="p-6">
-        <h2 className="text-white text-xl font-bold mb-4 text-center mt-4">Common Colleges</h2>
+        <h2 className="text-white text-xl font-bold mb-4 text-center mt-4">Common Inquiries</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {commonColleges.map((college) => (
             <div

@@ -44,8 +44,8 @@ export default function Index() {
 
         </div>
         <div className="text-white flex flex-col bg-invisible w-1/2 justify-center ">
-          <h1 className="text-4xl font-bold">What does it do?</h1>
-          <p className="font-serif text-slate-300 mt-2 ">CampusQuest analyzes the path of seniors from your high school going to college. It finds out information like geographical trends, popular majors, college acceptance rates, and provides insights into the most common college destinations. It even converts all college destinations and majors into one simplistic map! This helps students make informed decisions about their higher education journey. </p>
+          <h1 className="text-4xl font-bold">Campus Quest</h1>
+          <p className="font-serif text-slate-300 mt-2 ">CampusQuest analyzes the path of seniors from your high school going to college. CampusQuest discovers information like geographical trends, popular majors, college acceptance rates, and provides insights into the most common college destinations. CampusQuest converts all college destinations and majors into one comprehensive map! This tool helps students make informed decisions about their higher education journey. </p>
         </div>
 
       </div>
