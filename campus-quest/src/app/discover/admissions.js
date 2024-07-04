@@ -1,8 +1,7 @@
 // Import isomorphic-fetch
 import fetch from 'isomorphic-fetch';
 
-function abbrState(input, to){
-    
+async function abbrState(input, to){
     var states = [
         ['Arizona', 'AZ'],
         ['Alabama', 'AL'],
@@ -55,12 +54,10 @@ function abbrState(input, to){
         ['Wisconsin', 'WI'],
         ['Wyoming', 'WY'],
     ];
-
-    
      if (to == 'name'){
-        input = input.toUpperCase();
-        for(i = 0; i < states.length; i++){
+        for(var i = 0; i < states.length; i++){
             if(states[i][1] == input){
+                console.log("ABBR-ST-fd")
                 return(states[i][0]);
             }
         }    
@@ -93,7 +90,7 @@ export async function fetchAdmissionsData(college) {
         // Access city and state information
         const city = json.results[0].school.city;
         const st = json.results[0].school.state;
-        const state = abbrState(st, "name")
+        const state = await abbrState(String(st), "name")
         
         
 
