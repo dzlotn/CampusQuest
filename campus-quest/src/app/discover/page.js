@@ -19,23 +19,23 @@ const hardcodedColleges = {
     name: 'Cornell University',
     icon: '/cornell.jpg', // Replace with actual icon path
     acceptanceRate: 0.105, // Example acceptance rate (10.5%)
-    tuitionCost: 60000, // Example tuition cost
-    state: 'NY',
+    tuitionCost: "60,000", // Example tuition cost
+    state: 'New York',
     city: 'Ithaca',
   },
   "Cornell University": {
     name: 'Cornell University',
     icon: '/cornell.jpg', // Replace with actual icon path
     acceptanceRate: 0.105, // Example acceptance rate (10.5%)
-    tuitionCost: 60000, // Example tuition cost
-    state: 'NY',
+    tuitionCost: "60,000", // Example tuition cost
+    state: 'New York',
     city: 'Ithaca',
   },
   MIT: {
     name: "MIT",
     icon: "/mit.jpg",
     acceptanceRate: 0.04, // Example acceptance rate (10.5%)
-    tuitionCost: 79850, // Example tuition cost
+    tuitionCost: "79,850", // Example tuition cost
     state: 'Massachusetts',
     city: 'Boston',
     
@@ -174,7 +174,7 @@ export default function Discover() {
               {collegeInfo && collegeInfo.name === college.name && (
                 <div className="absolute inset-0 bg-white bg-opacity-90 flex flex-col items-center justify-center p-4">
                   <h3 className="text-gray-900 text-lg font-bold">
-                    {college.name.includes('University') ? college.name : `${college.name} University`}
+                  {college.name.includes('University') || college.name === 'MIT' ? college.name : `${college.name} University`}
                   </h3>
                   {error ? (
                     <p className="text-red-500 mt-2">Admissions data not available</p>
@@ -198,7 +198,7 @@ export default function Discover() {
             <div className="flex items-center">
               <img src={collegeInfo.icon} alt="College Icon" className="h-16 w-16 rounded-full" />
               <h2 className="text-gray-900 text-2xl font-bold ml-4">
-                {collegeInfo.name.includes('University') ? collegeInfo.name : `${collegeInfo.name} University`}
+              {collegeInfo.name.includes('University') || collegeInfo.name === 'MIT' ? collegeInfo.name : `${collegeInfo.name} University`}
               </h2>
             </div>
             <div className="mt-6">
