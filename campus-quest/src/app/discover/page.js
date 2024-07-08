@@ -20,6 +20,7 @@ const hardcodedColleges = {
     icon: '/cornell.jpg', // Replace with actual icon path
     acceptanceRate: 0.105, // Example acceptance rate (10.5%)
     tuitionCost: "60,000", // Example tuition cost
+    roomBoardCost: "15,000", // Example room and board cost
     state: 'New York',
     city: 'Ithaca',
   },
@@ -28,6 +29,7 @@ const hardcodedColleges = {
     icon: '/cornell.jpg', // Replace with actual icon path
     acceptanceRate: 0.105, // Example acceptance rate (10.5%)
     tuitionCost: "60,000", // Example tuition cost
+    roomBoardCost: "15,000", // Example room and board cost
     state: 'New York',
     city: 'Ithaca',
   },
@@ -36,9 +38,9 @@ const hardcodedColleges = {
     icon: "/mit.jpg",
     acceptanceRate: 0.04, // Example acceptance rate (10.5%)
     tuitionCost: "79,850", // Example tuition cost
+    roomBoardCost: "14,720", // Example room and board cost
     state: 'Massachusetts',
     city: 'Boston',
-    
   },
 };
 
@@ -65,6 +67,7 @@ export default function Discover() {
         icon: icon,
         acceptanceRate: admissions.acceptanceRate ? (admissions.acceptanceRate * 100).toFixed(2) : 'N/A',
         tuitionCost: admissions.tuitionCost ? admissions.tuitionCost : 'N/A',
+        roomBoardCost: admissions.roomBoardCost ? admissions.roomBoardCost : 'N/A',
         state: admissions.state ? admissions.state : 'N/A',
         city: admissions.city ? admissions.city : 'N/A',
       });
@@ -78,6 +81,7 @@ export default function Discover() {
         icon: icon,
         acceptanceRate: 'N/A',
         tuitionCost: 'N/A',
+        roomBoardCost: 'N/A',
         state: 'N/A',
         city: 'N/A',
       });
@@ -102,6 +106,7 @@ export default function Discover() {
         icon: college.icon,
         acceptanceRate: admissions.acceptanceRate ? (admissions.acceptanceRate * 100).toFixed(2) : 'N/A',
         tuitionCost: admissions.tuitionCost ? admissions.tuitionCost : 'N/A',
+        roomBoardCost: admissions.roomBoardCost ? admissions.roomBoardCost : 'N/A',
         state: admissions.state ? admissions.state : 'N/A',
         city: admissions.city ? admissions.city : 'N/A',
       });
@@ -113,6 +118,7 @@ export default function Discover() {
         icon: college.icon,
         acceptanceRate: 'N/A',
         tuitionCost: 'N/A',
+        roomBoardCost: 'N/A',
         state: 'N/A',
         city: 'N/A',
       });
@@ -182,6 +188,7 @@ export default function Discover() {
                     <>
                       <p className="text-gray-700 mt-2">Admissions Rate: {collegeInfo.acceptanceRate}%</p>
                       <p className="text-gray-700 mt-2">Tuition Cost: ${collegeInfo.tuitionCost}</p>
+                      <p className="text-gray-700 mt-2">Room and Board Cost: ${collegeInfo.roomBoardCost}</p>
                       <p className="text-gray-700 mt-2">State: {collegeInfo.state}</p>
                       <p className="text-gray-700 mt-2">City: {collegeInfo.city}</p>
                     </>
@@ -207,6 +214,9 @@ export default function Discover() {
               </h3>
               <h3 className="text-gray-700 text-lg font-bold mt-2">
                 Tuition Cost: <span className="text-gray font-medium">${collegeInfo.tuitionCost}</span>
+              </h3>
+              <h3 className="text-gray-700 text-lg font-bold mt-2">
+                Room and Board Cost: <span className="text-gray font-medium">${collegeInfo.roomBoardCost}</span>
               </h3>
               <h3 className="text-gray-700 text-lg font-bold mt-2">
                 State: <span className="text-gray font-medium">{collegeInfo.state}</span>
