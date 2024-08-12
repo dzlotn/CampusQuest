@@ -29,24 +29,16 @@ const Navbar = () => {
             </li>
             <li class="p-5 xl:p-8">
               <div class="hover:text-[#94D1BE] hover:scale-105">
-                <a href="">
-                  <span>Statistics</span>
+                <a href="/compare">
+                  <span>Compare</span>
                 </a>
               </div>
             </li>
             <li class="p-5 xl:p-8">
-              <a href="">
+              <a href="/map">
                 <div class="hover:text-[#94D1BE] hover:scale-105">
 
                   <span>Map</span>
-                </div>
-              </a>
-            </li>
-            <li class="p-5 xl:p-8">
-              <a href="">
-                <div class="hover:text-[#94D1BE] hover:scale-105">
-
-                  <span>My School</span>
                 </div>
               </a>
             </li>
