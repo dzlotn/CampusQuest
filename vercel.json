@@ -1,4 +1,3 @@
 {
-  "framework": "nextjs",
-  "rootDirectory": "campus-quest"
+  "framework": "nextjs"
 }
