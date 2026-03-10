@@ -1,8 +1,10 @@
-'use client'
+'use client';
+
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { search, logChanges, checkIcon } from './search'; // Assuming 'search.js' is in the same directory
-import { testCollegeInfo } from './admissions'; // Assuming 'admissions.js' is in the same directory
+import { checkIcon } from './search';
+import { Button } from '../components/Button';
+import { Card } from '../components/Card';
 
 const commonColleges = [
   { name: 'Harvard University', icon: '/harvard.jpg' },
@@ -13,235 +15,188 @@ const commonColleges = [
   { name: 'Columbia University', icon: '/columbia.jpeg' },
 ];
 
-// Hardcoded college data
 const hardcodedColleges = {
-  Cornell: {
-    name: 'Cornell University',
-    icon: '/cornell.jpg', // Replace with actual icon path
-    acceptanceRate: 0.105, // Example acceptance rate (10.5%)
-    tuitionCost: "60,000", // Example tuition cost
-    roomBoardCost: "15,000", // Example room and board cost
-    state: 'New York',
-    city: 'Ithaca',
-  },
-  "Cornell University": {
-    name: 'Cornell University',
-    icon: '/cornell.jpg', // Replace with actual icon path
-    acceptanceRate: 0.105, // Example acceptance rate (10.5%)
-    tuitionCost: "60,000", // Example tuition cost
-    roomBoardCost: "15,000", // Example room and board cost
-    state: 'New York',
-    city: 'Ithaca',
-  },
-  MIT: {
-    name: "MIT",
-    icon: "/mit.jpg",
-    acceptanceRate: 0.04, // Example acceptance rate (10.5%)
-    tuitionCost: "79,850", // Example tuition cost
-    roomBoardCost: "14,720", // Example room and board cost
-    state: 'Massachusetts',
-    city: 'Boston',
-  },
+  Cornell: { name: 'Cornell University', icon: '/cornell.jpg', acceptanceRate: 0.105, tuitionCost: '60,000', roomBoardCost: '15,000', state: 'New York', city: 'Ithaca' },
+  'Cornell University': { name: 'Cornell University', icon: '/cornell.jpg', acceptanceRate: 0.105, tuitionCost: '60,000', roomBoardCost: '15,000', state: 'New York', city: 'Ithaca' },
+  MIT: { name: 'MIT', icon: '/mit.jpg', acceptanceRate: 0.04, tuitionCost: '79,850', roomBoardCost: '14,720', state: 'Massachusetts', city: 'Boston' },
 };
+
+function formatInfo(data, icon) {
+  const name = data?.name ?? '';
+  return {
+    name,
+    icon: icon || '/college.jpg',
+    acceptanceRate: data?.acceptanceRate != null ? (data.acceptanceRate * 100).toFixed(2) : 'N/A',
+    tuitionCost: data?.tuitionCost ?? 'N/A',
+    roomBoardCost: data?.roomBoardCost ?? 'N/A',
+    state: data?.state ?? 'N/A',
+    city: data?.city ?? 'N/A',
+  };
+}
 
 export default function Discover() {
   const [collegeInfo, setCollegeInfo] = useState(null);
   const [error, setError] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const fetchAdmissions = async (schoolName) => {
+    const res = await fetch(`/api/colleges/admissions?name=${encodeURIComponent(schoolName)}`);
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || 'Could not load that school.');
+    }
+    return res.json();
+  };
 
   const handleSearch = async () => {
-    try {
-      const college = search(); // Perform the search
-      const icon = await checkIcon(college); // Fetch the college icon
-      let admissions = {};
+    const query = searchInput?.trim() || '';
+    if (!query) return;
+    setLoading(true);
+    setError(false);
+    setCollegeInfo(null);
 
-      // Check if the college is hardcoded
-      if (hardcodedColleges[college]) {
-        admissions = hardcodedColleges[college];
-      } else {
-        admissions = await testCollegeInfo(college);
+    try {
+      if (hardcodedColleges[query]) {
+        const a = hardcodedColleges[query];
+        const icon = await checkIcon(a.name);
+        setCollegeInfo(formatInfo({ name: a.name, acceptanceRate: a.acceptanceRate, tuitionCost: a.tuitionCost, roomBoardCost: a.roomBoardCost, state: a.state, city: a.city }, icon));
+        setLoading(false);
+        return;
       }
 
-      // Set the college information
-      setCollegeInfo({
-        name: college,
-        icon: icon,
-        acceptanceRate: admissions.acceptanceRate ? (admissions.acceptanceRate * 100).toFixed(2) : 'N/A',
-        tuitionCost: admissions.tuitionCost ? admissions.tuitionCost : 'N/A',
-        roomBoardCost: admissions.roomBoardCost ? admissions.roomBoardCost : 'N/A',
-        state: admissions.state ? admissions.state : 'N/A',
-        city: admissions.city ? admissions.city : 'N/A',
-      });
-      setError(false); // Reset error state
-    } catch (error) {
-      console.error('Error searching for college:', error);
-      const college = search(); // Perform the search
-      const icon = await checkIcon(college); // Fetch the college icon
-      setCollegeInfo({
-        name: college,
-        icon: icon,
-        acceptanceRate: 'N/A',
-        tuitionCost: 'N/A',
-        roomBoardCost: 'N/A',
-        state: 'N/A',
-        city: 'N/A',
-      });
-      setError(true); // Set error state
+      const data = await fetchAdmissions(query);
+      const canonicalName = data.name || query;
+      setCollegeInfo(formatInfo(data, '/college.jpg'));
+      setSearchInput(canonicalName);
+      setLoading(false);
+      checkIcon(canonicalName).then((icon) => {
+        setCollegeInfo((prev) => (prev ? { ...prev, icon } : prev));
+      }).catch(() => {});
+    } catch (err) {
+      const icon = await checkIcon(query).catch(() => '/college.jpg');
+      setCollegeInfo({ name: query, icon, acceptanceRate: 'N/A', tuitionCost: 'N/A', roomBoardCost: 'N/A', state: 'N/A', city: 'N/A' });
+      setError(true);
+      setLoading(false);
     }
   };
 
   const handleCardClick = async (college) => {
-    try {
-      let admissions = {};
-
-      // Check if the college is hardcoded
-      if (hardcodedColleges[college.name]) {
-        admissions = hardcodedColleges[college.name];
-      } else {
-        admissions = await testCollegeInfo(college.name);
-      }
-
-      // Set the college information
-      setCollegeInfo({
-        name: college.name,
-        icon: college.icon,
-        acceptanceRate: admissions.acceptanceRate ? (admissions.acceptanceRate * 100).toFixed(2) : 'N/A',
-        tuitionCost: admissions.tuitionCost ? admissions.tuitionCost : 'N/A',
-        roomBoardCost: admissions.roomBoardCost ? admissions.roomBoardCost : 'N/A',
-        state: admissions.state ? admissions.state : 'N/A',
-        city: admissions.city ? admissions.city : 'N/A',
-      });
-      setError(false); // Reset error state
-    } catch (error) {
-      console.error('Error fetching college info:', error);
-      setCollegeInfo({
-        name: college.name,
-        icon: college.icon,
-        acceptanceRate: 'N/A',
-        tuitionCost: 'N/A',
-        roomBoardCost: 'N/A',
-        state: 'N/A',
-        city: 'N/A',
-      });
-      setError(true); // Set error state
-    }
-  };
-
-  const handleBack = () => {
+    setLoading(true);
+    setError(false);
     setCollegeInfo(null);
-    setError(false); // Reset error state when going back
+    try {
+      if (hardcodedColleges[college.name]) {
+        const a = hardcodedColleges[college.name];
+        setCollegeInfo(formatInfo({ name: college.name, acceptanceRate: a.acceptanceRate, tuitionCost: a.tuitionCost, roomBoardCost: a.roomBoardCost, state: a.state, city: a.city }, college.icon));
+        setLoading(false);
+        return;
+      }
+      const data = await fetchAdmissions(college.name);
+      const displayName = data.name || college.name;
+      const icon = await checkIcon(displayName).catch(() => college.icon);
+      setCollegeInfo(formatInfo(data, icon));
+      setError(false);
+    } catch (err) {
+      setCollegeInfo({ name: college.name, icon: college.icon, acceptanceRate: 'N/A', tuitionCost: 'N/A', roomBoardCost: 'N/A', state: 'N/A', city: 'N/A' });
+      setError(true);
+    }
+    setLoading(false);
   };
+
+  const handleBack = () => { setCollegeInfo(null); setError(false); };
+
+  const container = 'max-w-6xl mx-auto px-4 sm:px-6';
 
   return (
-    <div className="bg-black min-h-screen">
-      <div className="relative bg-black">
-        <div className="image-container relative flex items-center justify-center pt-4 ">
-          <Image
-            src="/college.jpg"
-            alt="sectionimage"
-            className="rounded-lg"
-            width={500}
-            height={500}
-          />
-          <h1 id="discoverTitle" className="text-overlay drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] absolute inset-0 flex items-center justify-center text-white font-bold text-2xl">
-            Discover Colleges and Universities
-          </h1>
-          <div className="text-box-container absolute inset-x-0 bottom-0 mb-10 flex items-center justify-center">
-            <input
-              type="text"
-              id="tbox1"
-              name="Name"
-              placeholder="Search for a school"
-              className="bg-black text-white p-2 border border-white rounded-l-lg"
-              onKeyUp={() => logChanges('tbox1')}
-            ></input>
-            <button
-              className="bg-green-500 rounded-r-lg px-4 py-2 cursor-pointer active:bg-green-600 border"
-              id="gobutton"
-              onClick={handleSearch}
-            >
-              Go
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="p-6">
-        <h2 className="text-white text-xl font-bold mb-4 text-center mt-4">Common Inquiries</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {commonColleges.map((college) => (
-            <div
-              key={college.name}
-              className="relative bg-white rounded-lg overflow-hidden shadow-lg cursor-pointer hover:shadow-xl"
-              onClick={() => handleCardClick(college)}
-            >
-              <img src={college.icon} alt={`${college.name} Icon`} className="w-full h-40 object-cover" />
-              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                <h3 className="text-white text-lg font-bold">{college.name}</h3>
+    <div className="min-h-screen bg-background">
+      <div className={`${container} py-8 sm:py-10`}>
+        <header className="mb-8">
+          <h1 className="text-page-title text-white">Discover</h1>
+          <p className="mt-1.5 text-muted-foreground text-sm">Search by name—typos are fine. Pick a school below or type any name.</p>
+        </header>
+
+        <Card className="overflow-hidden">
+          <div className="relative h-48 sm:h-56">
+            <Image src="/college.jpg" alt="" fill className="object-cover" sizes="896px" />
+            <div className="absolute inset-0 bg-background/70 flex flex-col justify-center px-5">
+              <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
+                <input
+                  type="text"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                  placeholder="e.g. Stanford, MIT, UCLA"
+                  className="flex-1 min-w-0 h-10 px-3 rounded-input border border-border bg-surface text-white placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                />
+                <Button onClick={handleSearch} size="md" className="sm:shrink-0" disabled={loading}>
+                  {loading ? 'Searching…' : 'Search'}
+                </Button>
               </div>
-              {collegeInfo && collegeInfo.name === college.name && (
-                <div className="absolute inset-0 bg-white bg-opacity-90 flex flex-col items-center justify-center p-4">
-                  <h3 className="text-gray-900 text-lg font-bold">
-                  {college.name.includes('University') || college.name === 'MIT' ? college.name : `${college.name} University`}
-                  </h3>
+            </div>
+          </div>
+        </Card>
+
+        <h2 className="text-section-title text-white mt-10 mb-4">Popular schools</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {commonColleges.map((college) => (
+            <button
+              type="button"
+              key={college.name}
+              onClick={() => handleCardClick(college)}
+              disabled={loading}
+              className="group relative rounded-card border border-border bg-surface overflow-hidden text-left transition-colors hover:border-muted-foreground/40 hover:bg-surface-hover disabled:opacity-70"
+            >
+              <img src={college.icon} alt="" className="w-full h-36 object-cover" />
+              <div className="absolute inset-0 flex items-center justify-center bg-background/50 p-4">
+                <span className="font-medium text-white text-sm text-center">{college.name}</span>
+              </div>
+              {collegeInfo?.name === college.name && (
+                <div className="absolute inset-0 bg-surface p-4 flex flex-col justify-center">
+                  <span className="text-card-title text-white">{college.name}</span>
                   {error ? (
-                    <p className="text-red-500 mt-2">Admissions data not available</p>
+                    <p className="text-red-400 text-sm mt-2">Data not available</p>
                   ) : (
-                    <>
-                      <p className="text-gray-700 mt-2">Admissions Rate: {collegeInfo.acceptanceRate}%</p>
-                      <p className="text-gray-700 mt-2">Tuition Cost: ${collegeInfo.tuitionCost}</p>
-                      <p className="text-gray-700 mt-2">Room and Board Cost: ${collegeInfo.roomBoardCost}</p>
-                      <p className="text-gray-700 mt-2">State: {collegeInfo.state}</p>
-                      <p className="text-gray-700 mt-2">City: {collegeInfo.city}</p>
-                    </>
+                    <ul className="text-muted-foreground text-sm mt-2 space-y-0.5">
+                      <li>Admissions: {collegeInfo.acceptanceRate}%</li>
+                      <li>Tuition: ${collegeInfo.tuitionCost}</li>
+                      <li>{collegeInfo.city}, {collegeInfo.state}</li>
+                    </ul>
                   )}
                 </div>
               )}
-            </div>
+            </button>
           ))}
         </div>
       </div>
+
       {collegeInfo && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="w-full max-w-sm bg-white rounded-lg p-6 shadow-lg">
-            <div className="flex items-center">
-              <img src={collegeInfo.icon} alt="College Icon" className="h-16 w-16 rounded-full" />
-              <h2 className="text-gray-900 text-2xl font-bold ml-4">
-              {collegeInfo.name.includes('University') || collegeInfo.name === 'MIT' ? collegeInfo.name : `${collegeInfo.name} University`}
-              </h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm" onClick={handleBack}>
+          <Card className="w-full max-w-md p-6 shadow-card-hover" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center gap-4">
+              <img src={collegeInfo.icon} alt="" className="h-14 w-14 rounded-card object-cover border border-border shrink-0" />
+              <h2 className="text-section-title text-white flex-1 truncate">{collegeInfo.name}</h2>
             </div>
-            <div className="mt-6">
-              <h3 className="text-gray-700 text-lg font-bold">
-                Admissions Rate: <span className="text-gray font-medium">{collegeInfo.acceptanceRate}%</span>
-              </h3>
-              <h3 className="text-gray-700 text-lg font-bold mt-2">
-                Tuition Cost: <span className="text-gray font-medium">${collegeInfo.tuitionCost}</span>
-              </h3>
-              <h3 className="text-gray-700 text-lg font-bold mt-2">
-                Room and Board Cost: <span className="text-gray font-medium">${collegeInfo.roomBoardCost}</span>
-              </h3>
-              <h3 className="text-gray-700 text-lg font-bold mt-2">
-                State: <span className="text-gray font-medium">{collegeInfo.state}</span>
-              </h3>
-              <h3 className="text-gray-700 text-lg font-bold mt-2">
-                City: <span className="text-gray font-medium">{collegeInfo.city}</span>
-              </h3>
-            </div>
-            <div className="mt-6 flex space-x-4">
-              <button
-                onClick={handleBack}
-                className="w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded-lg hover:bg-blue-700"
-              >
-                Back
-              </button>
-              <a
-                href={`https://www.google.com/search?q=${collegeInfo.name}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full bg-green-600 text-white text-lg font-semibold py-2 rounded-lg text-center hover:bg-green-700"
-              >
-                More Info
+            <dl className="mt-6 space-y-3">
+              {[
+                ['Admissions rate', `${collegeInfo.acceptanceRate}%`],
+                ['Tuition (in-state)', `$${collegeInfo.tuitionCost}`],
+                ['Room & board', `$${collegeInfo.roomBoardCost}`],
+                ['Location', `${collegeInfo.city}, ${collegeInfo.state}`],
+              ].map(([label, value]) => (
+                <div key={label} className="flex justify-between text-sm">
+                  <dt className="text-muted-foreground">{label}</dt>
+                  <dd className="font-medium text-white">{value}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="mt-6 flex gap-3">
+              <Button variant="secondary" className="flex-1" onClick={handleBack}>Back</Button>
+              <a href={`https://www.google.com/search?q=${encodeURIComponent(collegeInfo.name)}`} target="_blank" rel="noopener noreferrer" className="flex-1">
+                <Button variant="primary" className="w-full">More info</Button>
               </a>
             </div>
-          </div>
+          </Card>
         </div>
       )}
     </div>

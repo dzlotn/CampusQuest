@@ -65,7 +65,10 @@ async function abbrState(input, to){
 }
 // Function to fetch admissions data from the College Scorecard API
 export async function fetchAdmissionsData(college) {
-    const apiKey = "5elOYbbfPfFRR0JwuFqKOmwz2PxqVlNZKuvTpukC";
+    const apiKey = process.env.COLLEGESCORECARD_API_KEY;
+    if (!apiKey) {
+        throw new Error('COLLEGESCORECARD_API_KEY is not configured. Set it in .env.local.');
+    }
     const apiUrl = `https://api.data.gov/ed/collegescorecard/v1/schools.json?api_key=${apiKey}&school.name=${encodeURIComponent(college)}`;
 
     try {

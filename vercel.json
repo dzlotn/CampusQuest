@@ -1,7 +1,4 @@
 {
-  "buildCommand": "cd campus-quest && npm install && npm run build",
-  "outputDirectory": "campus-quest/.next",
-  "installCommand": "cd campus-quest && npm install",
   "framework": "nextjs",
   "rootDirectory": "campus-quest"
 }
